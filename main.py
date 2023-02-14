@@ -1,16 +1,32 @@
-# This is a sample Python script.
+from prep import data_reader, preprocess
+from sklearn.model_selection import train_test_split
+import tensorflow as tf
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+tr_te_pct = 0.2
+tr_val_pct = 0.2
+combined_df = data_reader.read_combined()
 
+Y = combined_df['Binding']
+combined_df = combined_df.drop('Binding', axis=1)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+# apply min-max normalization to each column
+combined_df = combined_df.apply(preprocess.min_max_normalize, axis=0)
 
+X = combined_df
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=tr_te_pct, random_state=None)
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=tr_val_pct, random_state=None)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+with tf.device('/device:GPU:0'):
+    model = RandomForestClassifier(random_state=0, n_estimators=50, warm_start=True, n_jobs=-1)
+
+nsamples, nx, ny, nz = x_train.shape
+xx = x_train.reshape((nsamples, nx*ny))
+model.fit(xx, y_train)
+nsamples, nx, ny, nz = x_test.shape
+xx = x_test.reshape((nsamples, nx*ny))
+y_pred = model.predict(xx)
+
+accuracy_score(y_test, y_pred.round())
