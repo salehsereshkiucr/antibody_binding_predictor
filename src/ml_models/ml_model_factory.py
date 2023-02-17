@@ -13,8 +13,6 @@ class MlModelFactory:
         match model_name:
             case 'mlp':
                 return MLP(self.args)
-            # case 'dg2':
-            #     return DeepGuideTwo(self.args)
             case _:
                 print('No model called {model}. Please select a valid model in config.yaml.'.format(
                     model=model_name,
