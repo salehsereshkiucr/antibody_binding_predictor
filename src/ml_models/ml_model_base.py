@@ -20,27 +20,14 @@ class MLModel(ABC):
         self.exp_model_directory = os.path.join(self.exp_directory, 'model', '')
         self.exp_weights_directory = os.path.join(self.exp_directory, 'weights', '')
 
-        self.pretrain_model_path = os.path.join(self.exp_model_directory, self.args.cas + '_' + self.args.model + '_' + str(self.args.guide_length) + 'nt_pretrain_model.h5')
-        self.pretrain_weights_path = os.path.join(self.exp_weights_directory, self.args.cas + '_' + self.args.model + '_' + str(self.args.guide_length) + 'nt_pretrain_weights.h5')
-        self.train_model_path = os.path.join(self.exp_model_directory, self.args.cas + '_' + self.args.model + '_' + str(self.args.guide_length) + 'nt_train_model.h5')
-        self.train_weights_path = os.path.join(self.exp_weights_directory, self.args.cas + '_' + self.args.model + '_' + str(self.args.guide_length) + 'nt_train_weights.h5')
+        self.train_model_path = os.path.join(self.exp_model_directory, self.args.model + '_train_model.h5')
+        self.train_weights_path = os.path.join(self.exp_weights_directory,  self.args.model + '_train_weights.h5')
 
-        lib_name = self.args.inference_guides_csv_file_name.split('.csv')[0]
-        self.inference_output_path = os.path.join(self.exp_directory, lib_name + '_' + self.args.cas + '_' + self.args.model + '_' + str(self.args.guide_length) + 'nt_predicted_scores.csv')
+        self.inference_output_path = os.path.join(self.exp_directory, + self.args.model + 'predicted.csv')
 
         mode = self.args.mode
 
-        if (mode == 'pretrain' or mode == 'pt' or mode == 'pti'):
-            if os.path.exists(self.pretrain_model_path):
-                print('Error: Pretrained model already exists: {path}'.format(path=self.pretrain_model_path))
-                print('Please rename the experiment or make a backup.')
-                sys.exit(1)
-            if os.path.exists(self.pretrain_weights_path):
-                print('Error: Pretrain weights already exist: {path}'.format(path=self.pretrain_weights_path))
-                print('Please rename the experiment or make a backup.')
-                sys.exit(1)
-
-        if (mode == 'train' or mode == 'pt' or mode == 'pti' or mode == 'ti'):
+        if (mode == 'train' or mode == 'ti'):
             if os.path.exists(self.train_model_path):
                 print('Error: Trained model already exists: {path}'.format(path=self.train_model_path))
                 print('Please rename the experiment or make a backup.')
@@ -51,7 +38,7 @@ class MLModel(ABC):
                 sys.exit(1)
 
 
-        if (mode == 'inference' or mode == 'pti' or mode == 'ti') and \
+        if (mode == 'inference' or mode == 'ti') and \
             os.path.exists(self.inference_output_path):
             print('Error: Inference output file already exists: {path}'.format(self.inference_output_path))
             print('Please rename the experiment or make a backup.')
@@ -68,13 +55,6 @@ class MLModel(ABC):
     def get_model(self) -> tensorflow.keras.Model:
         '''
         Create and return a tensorflow.keras.Model model.
-        '''
-
-
-    @abstractmethod
-    def pretrain(self) -> tensorflow.keras.callbacks.History:
-        '''
-        Pretrain a model and returna History object.
         '''
 
 

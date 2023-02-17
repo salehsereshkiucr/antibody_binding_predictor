@@ -1,7 +1,7 @@
 import argparse
 
 from ml_models.ml_model_base import MLModel
-from ml_models.deepguide_one import DeepGuideOne
+from ml_models.mlp import MLP
 
 
 class MlModelFactory:
@@ -11,8 +11,8 @@ class MlModelFactory:
 
     def get_model(self, model_name: str) -> MLModel:
         match model_name:
-            case 'dg1':
-                return DeepGuideOne(self.args)
+            case 'mlp':
+                return MLP(self.args)
             # case 'dg2':
             #     return DeepGuideTwo(self.args)
             case _:
