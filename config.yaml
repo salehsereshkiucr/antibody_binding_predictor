@@ -1,0 +1,23 @@
+experiment_name: 'example_run'
+model: 'mlp'  # Available choices: mlp
+mode: 'ti'  # train, inference, ti
+
+
+# PATHS
+input_directory: 'data/input/'
+output_directory: 'data/output/'
+
+# MLP
+train_csv: 'example_train.csv'  # Must be a .csv
+train_label_col_name: 'label'  # The name of the column in the training set that contains the true labels
+
+inference_csv: 'test.csv'
+inference_col_name: 'label'
+
+plot_model: True
+
+mlp_adam_lr: 0.003
+mlp_epochs: 10
+mlp_train_test_ratio: 0.7  # Default: 0.7 Means 70% of data used for training and 30% for validation.
+mlp_roc_curve_threshold: 3
+mlp_batch_size: 64
