@@ -23,7 +23,7 @@ class MLModel(ABC):
         self.train_model_path = os.path.join(self.exp_model_directory, self.args.model + '_train_model.h5')
         self.train_weights_path = os.path.join(self.exp_weights_directory,  self.args.model + '_train_weights.h5')
 
-        self.inference_output_path = os.path.join(self.exp_directory, + self.args.model + 'predicted.csv')
+        self.inference_output_path = os.path.join(self.exp_directory, + self.args.model + '_predicted.csv')
 
         mode = self.args.mode
 
